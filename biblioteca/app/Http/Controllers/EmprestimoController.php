@@ -10,27 +10,35 @@ use Illuminate\Support\Facades\DB;
 
 class EmprestimoController extends Controller
 {
-    /**
-     * Lista os empréstimos.
-     */
-    public function index(Request $request)
-    {
-        $busca = $request->input('situacao');
+    
+    
+public function index(Request $request)
+{
+    $situacao = $request->input('situacao');
 
-        $emprestimos = Emprestimo::with(['livro', 'leitor'])
-            ->when($busca, function ($query, $busca) {
-                $query->where('status', $busca);
-            })
-            ->orderByDesc('data_emprestimo')
-            ->paginate(10)
-            ->withQueryString();
+    $emprestimos = Emprestimo::with(['livro', 'leitor'])
 
-        return view('emprestimos.index', compact('emprestimos', 'busca'));
-    }
+        ->when($situacao === 'atrasados', function ($query) {
+            $query->where('status', 'Em andamento')
+                ->whereDate('data_prevista', '<', now()->toDateString());
+        })
 
-    /**
-     * Exibe o formulário de novo empréstimo.
-     */
+        ->when(
+            $situacao && $situacao !== 'atrasados',
+            function ($query) use ($situacao) {
+                $query->where('status', $situacao);
+            }
+        )
+
+        ->orderByDesc('data_emprestimo')
+        ->paginate(10)
+        ->withQueryString();
+
+    return view('emprestimos.index', compact('emprestimos', 'situacao'));
+}
+
+
+    
     public function create()
     {
         $livros = Livro::where('quantidade', '>', 0)
@@ -42,9 +50,7 @@ class EmprestimoController extends Controller
         return view('emprestimos.create', compact('livros', 'leitores'));
     }
 
-    /**
-     * Registra um novo empréstimo.
-     */
+    
     public function store(Request $request)
     {
         $dados = $request->validate([
@@ -85,9 +91,7 @@ class EmprestimoController extends Controller
             ->with('sucesso', 'Empréstimo registrado com sucesso!');
     }
 
-    /**
-     * Exibe os detalhes de um empréstimo.
-     */
+    
     public function show(Emprestimo $emprestimo)
     {
         $emprestimo->load(['livro', 'leitor']);

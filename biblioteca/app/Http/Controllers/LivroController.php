@@ -8,9 +8,7 @@ use Illuminate\Validation\Rule;
 
 class LivroController extends Controller
 {
-    /**
-     * Exibe a lista de livros.
-     */
+    
     public function index(Request $request)
     {
         $busca = $request->input('busca');
@@ -29,17 +27,13 @@ class LivroController extends Controller
         return view('livros.index', compact('livros', 'busca'));
     }
 
-    /**
-     * Exibe o formulário de cadastro.
-     */
+    
     public function create()
     {
         return view('livros.create');
     }
 
-    /**
-     * Salva um novo livro.
-     */
+    
     public function store(Request $request)
     {
         $dados = $request->validate([
@@ -63,25 +57,19 @@ class LivroController extends Controller
             ->with('sucesso', 'Livro cadastrado com sucesso!');
     }
 
-    /**
-     * Exibe os detalhes de um livro.
-     */
+    
     public function show(Livro $livro)
     {
         return view('livros.show', compact('livro'));
     }
 
-    /**
-     * Exibe o formulário de edição.
-     */
+    
     public function edit(Livro $livro)
     {
         return view('livros.edit', compact('livro'));
     }
 
-    /**
-     * Atualiza os dados de um livro.
-     */
+    
     public function update(Request $request, Livro $livro)
     {
         $dados = $request->validate([
@@ -110,9 +98,7 @@ class LivroController extends Controller
             ->with('sucesso', 'Livro atualizado com sucesso!');
     }
 
-    /**
-     * Exclui um livro.
-     */
+    
     public function destroy(Livro $livro)
     {
         if ($livro->emprestimos()->exists()) {

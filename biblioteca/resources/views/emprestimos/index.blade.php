@@ -17,17 +17,25 @@
 
 <form action="{{ route('emprestimos.index') }}" method="GET" class="mb-4">
     <div class="input-group">
-        <select name="situacao" class="form-select">
-            <option value="">Todas as situações</option>
-            <option value="Em andamento"
-                {{ $busca == 'Em andamento' ? 'selected' : '' }}>
-                Em andamento
-            </option>
-            <option value="Devolvido"
-                {{ $busca == 'Devolvido' ? 'selected' : '' }}>
-                Devolvido
-            </option>
-        </select>
+        
+<select name="situacao" class="form-select">
+    <option value="">Todas as situações</option>
+
+    <option value="Em andamento"
+        @selected($situacao === 'Em andamento')>
+        Em andamento
+    </option>
+
+    <option value="Devolvido"
+        @selected($situacao === 'Devolvido')>
+        Devolvido
+    </option>
+
+    <option value="atrasados"
+        @selected($situacao === 'atrasados')>
+        Atrasados
+    </option>
+</select>
 
         <button type="submit" class="btn btn-dark">
             Filtrar

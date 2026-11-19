@@ -8,9 +8,7 @@ use Illuminate\Validation\Rule;
 
 class LeitorController extends Controller
 {
-    /**
-     * Lista os leitores cadastrados.
-     */
+    
     public function index(Request $request)
     {
         $busca = $request->input('busca');
@@ -26,17 +24,13 @@ class LeitorController extends Controller
         return view('leitores.index', compact('leitores', 'busca'));
     }
 
-    /**
-     * Exibe o formulário de cadastro.
-     */
+    
     public function create()
     {
         return view('leitores.create');
     }
 
-    /**
-     * Cadastra um novo leitor.
-     */
+    
     public function store(Request $request)
     {
         $dados = $request->validate([
@@ -53,9 +47,7 @@ class LeitorController extends Controller
             ->with('sucesso', 'Leitor cadastrado com sucesso!');
     }
 
-    /**
-     * Exibe os detalhes de um leitor.
-     */
+    
     public function show(Leitor $leitore)
     {
         $leitore->load('emprestimos.livro');
@@ -63,17 +55,13 @@ class LeitorController extends Controller
         return view('leitores.show', ['leitor' => $leitore]);
     }
 
-    /**
-     * Exibe o formulário de edição.
-     */
+    
     public function edit(Leitor $leitore)
     {
         return view('leitores.edit', ['leitor' => $leitore]);
     }
 
-    /**
-     * Atualiza os dados do leitor.
-     */
+    
     public function update(Request $request, Leitor $leitore)
     {
         $dados = $request->validate([
@@ -100,9 +88,7 @@ class LeitorController extends Controller
             ->with('sucesso', 'Leitor atualizado com sucesso!');
     }
 
-    /**
-     * Exclui um leitor.
-     */
+    
     public function destroy(Leitor $leitore)
     {
         if ($leitore->emprestimos()->exists()) {
